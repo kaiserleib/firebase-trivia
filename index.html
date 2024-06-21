@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Things that are Yellow Trivia</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: left;
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+        }
+        .intro {
+            text-align: center;
+            font-size: 36px;
+        }
+        .question-number {
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+        .question {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+            font-size: 36px;
+            text-align: left;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px;
+        }
+        .navigation button {
+            padding: 10px 20px;
+            font-size: 20px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="introScreen" class="intro">
+            <div id="roundTitle"></div>
+            <button id="startButton" onclick="startRound()">Start Round</button>
+            <button id="prevRoundButton" onclick="navigateToPreviousRound()" style="display:none;">Previous Round</button>
+        </div>
+        <div id="questionNumber" class="question-number" style="display:none;"></div>
+        <div id="questionContainer" style="display:none;">
+            <div id="question" class="question"></div>
+            <ul id="options" class="options"></ul>
+        </div>
+        <div class="navigation">
+            <button id="prevButton" onclick="prevQuestionOrIntro()">Previous</button>
+            <button id="nextButton" onclick="nextQuestion()">Next</button>
+            <button id="nextRoundButton" onclick="navigateToNextRound()" style="display:none;">Next Round</button>
+        </div>
+    </div>
+
+    <script>
+        const triviaData = [
+            {
+                "round": "Round 1: Things that are Yellow",
+                "questions": [
+                    {
+                        "question": "The golden arches are a symbol of which fast-food chain?",
+                        "answer": "McDonald's"
+                    },
+                    {
+                        "question": "The Yellow River is the second-longest river in which country?",
+                        "options": ["India", "China", "Egypt", "Brazil"],
+                        "answer": "China"
+                    },
+                    {
+                        "question": "Which bird is known for its bright yellow plumage and its singing, often kept as a pet?",
+                        "answer": "Canary"
+                    },
+                    {
+                        "question": "What is the name of the yellow Pokémon that is the franchise's mascot?",
+                        "options": ["Charmander", "Squirtle", "Pikachu", "Bulbasaur"],
+                        "answer": "Pikachu"
+                    },
+                    {
+                        "question": "Daffodils are a type of what?",
+                        "options": ["Tree", "Shrub", "Flower", "Grass"],
+                        "answer": "Flower"
+                    },
+                    {
+                        "question": "Which Beatles song features the lyric 'We all live in a yellow submarine'?",
+                        "options": ["Hey Jude", "Let It Be", "Yellow Submarine", "Come Together"],
+                        "answer": "Yellow Submarine"
+                    },
+                    {
+                        "question": "What is the name of the yellow, cartoon dog in the show 'Adventure Time'?",
+                        "answer": "Jake"
+                    },
+                    {
+                        "question": "Which fruit is yellow when ripe and is often associated with monkeys?",
+                        "options": ["Apple", "Banana", "Mango", "Pineapple"],
+                        "answer": "Banana"
+                    },
+                    {
+                        "question": "The yellow jersey is awarded to the leader in which famous cycling race?",
+                        "options": ["Tour de France", "Giro d'Italia", "Vuelta a España", "Paris-Roubaix"],
+                        "answer": "Tour de France"
+                    },
+                    {
+                        "question": "What yellow condiment is commonly used on hot dogs and sandwiches?",
+                        "options": ["Ketchup", "Mustard", "Mayonnaise", "Relish"],
+                        "answer": "Mustard"
+                    }
+                ]
+            },
+            {
+                "round": "Round 2: Things that are Blue",
+                "questions": [
+                    {
+                        "question": "What is the name of the blue-skinned members of the Smurfs who live in mushroom-shaped houses?",
+                        "answer": "Smurfs"
+                    },
+                    {
+                        "question": "What type of bird is known for its distinctive blue feathers and often mimics the calls of other bird species?",
+                        "options": ["Blue Jay", "Parrot", "Canary", "Kingfisher"],
+                        "answer": "Blue Jay"
+                    },
+                    {
+                        "question": "Which planet is often referred to as the 'Blue Planet' due to its abundant water?",
+                        "answer": "Earth"
+                    },
+                    {
+                        "question": "What is the name of the gemstone that is deep blue in color and often used in jewelry?",
+                        "options": ["Sapphire", "Emerald", "Ruby", "Topaz"],
+                        "answer": "Sapphire"
+                    },
+                    {
+                        "question": "What is the name of the Disney character who is a blue alien and the best friend of Lilo?",
+                        "options": ["Stitch", "Mickey", "Goofy", "Donald"],
+                        "answer": "Stitch"
+                    },
+                    {
+                        "question": "Which musical genre, characterized by its melancholic sound, is often referred to as 'the blues'?",
+                        "answer": "Blues"
+                    },
+                    {
+                        "question": "What is the name of the famous blue gemstone that is the birthstone for December?",
+                        "options": ["Turquoise", "Garnet", "Amethyst", "Peridot"],
+                        "answer": "Turquoise"
+                    },
+                    {
+                        "question": "What is the name of the blue tang fish who is a friend of Nemo in the movie 'Finding Nemo'?",
+                        "options": ["Dory", "Marlin", "Gill", "Bubbles"],
+                        "answer": "Dory"
+                    },
+                    {
+                        "question": "What is the name of the blue-skinned goddess in Hindu mythology, often depicted playing a flute?",
+                        "answer": "Krishna"
+                    },
+                    {
+                        "question": "Which famous painting by Pablo Picasso is part of his Blue Period and depicts a somber guitarist?",
+                        "answer": "The Old Guitarist"
+                    }
+                ]
+            }
+        ];
+
+        let currentRoundIndex = 0;
+        let currentQuestionIndex = 0;
+
+        function displayIntroScreen() {
+            const roundTitleElement = document.getElementById('roundTitle');
+            const prevRoundButton = document.getElementById('prevRoundButton');
+            const startButton = document.getElementById('startButton');
+
+            roundTitleElement.innerText = triviaData[currentRoundIndex].round;
+            prevRoundButton.style.display = currentRoundIndex > 0 ? 'inline-block' : 'none';
+            startButton.style.display = 'inline-block';
+
+            document.getElementById('introScreen').style.display = 'block';
+            document.getElementById('questionNumber').style.display = 'none';
+            document.getElementById('questionContainer').style.display = 'none';
+            document.getElementById('prevButton').style.display = 'none';
+            document.getElementById('nextButton').style.display = 'none';
+            document.getElementById('nextRoundButton').style.display = 'none';
+        }
+
+        function startRound() {
+            currentQuestionIndex = 0;
+            displayQuestion(currentQuestionIndex);
+            document.getElementById('introScreen').style.display = 'none';
+            document.getElementById('questionNumber').style.display = 'block';
+            document.getElementById('questionContainer').style.display = 'block';
+            document.getElementById('prevButton').style.display = 'inline-block';
+            document.getElementById('nextButton').style.display = 'inline-block';
+        }
+
+        function displayQuestion(index) {
+            const questionData = triviaData[currentRoundIndex].questions[index];
+            const questionNumberElement = document.getElementById('questionNumber');
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const nextRoundButton = document.getElementById('nextRoundButton');
+
+            questionNumberElement.innerText = `Question ${index + 1}:`;
+            questionElement.innerText = questionData.question;
+
+            if (questionData.options) {
+                optionsElement.innerHTML = '';
+                questionData.options.forEach((option, i) => {
+                    const li = document.createElement('li');
+                    li.innerText = `${String.fromCharCode(97 + i)}) ${option}`;
+                    optionsElement.appendChild(li);
+                });
+            } else {
+                optionsElement.innerHTML = '';
+            }
+
+            document.getElementById('prevButton').disabled = false;
+            document.getElementById('nextButton').disabled = index === triviaData[currentRoundIndex].questions.length - 1;
+            nextRoundButton.style.display = (currentRoundIndex < triviaData.length - 1 && index === triviaData[currentRoundIndex].questions.length - 1) ? 'inline-block' : 'none';
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function prevQuestionOrIntro() {
+            if (currentQuestionIndex === 0) {
+                displayIntroScreen();
+            } else {
+                prevQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < triviaData[currentRoundIndex].questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function navigateToPreviousRound() {
+            if (currentRoundIndex > 0) {
+                currentRoundIndex--;
+                displayIntroScreen();
+            }
+        }
+
+        function navigateToNextRound() {
+            if (currentRoundIndex < triviaData.length - 1) {
+                currentRoundIndex++;
+                displayIntroScreen();
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'ArrowRight' || event.code === 'Space') {
+                nextQuestion();
+            } else if (event.code === 'ArrowLeft' || event.code === 'Backspace') {
+                prevQuestionOrIntro();
+            }
+        });
+
+        displayIntroScreen();
+    </script>
+</body>
+</html>

@@ -78,111 +78,40 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script>
-        const triviaData = [
-            {
-                "round": "Round 1: Things that are Yellow",
-                "questions": [
-                    {
-                        "question": "The golden arches are a symbol of which fast-food chain?",
-                        "answer": "McDonald's"
-                    },
-                    {
-                        "question": "The Yellow River is the second-longest river in which country?",
-                        "options": ["India", "China", "Egypt", "Brazil"],
-                        "answer": "China"
-                    },
-                    {
-                        "question": "Which bird is known for its bright yellow plumage and its singing, often kept as a pet?",
-                        "answer": "Canary"
-                    },
-                    {
-                        "question": "What is the name of the yellow Pokémon that is the franchise's mascot?",
-                        "options": ["Charmander", "Squirtle", "Pikachu", "Bulbasaur"],
-                        "answer": "Pikachu"
-                    },
-                    {
-                        "question": "Daffodils are a type of what?",
-                        "options": ["Tree", "Shrub", "Flower", "Grass"],
-                        "answer": "Flower"
-                    },
-                    {
-                        "question": "Which Beatles song features the lyric 'We all live in a yellow submarine'?",
-                        "options": ["Hey Jude", "Let It Be", "Yellow Submarine", "Come Together"],
-                        "answer": "Yellow Submarine"
-                    },
-                    {
-                        "question": "What is the name of the yellow, cartoon dog in the show 'Adventure Time'?",
-                        "answer": "Jake"
-                    },
-                    {
-                        "question": "Which fruit is yellow when ripe and is often associated with monkeys?",
-                        "options": ["Apple", "Banana", "Mango", "Pineapple"],
-                        "answer": "Banana"
-                    },
-                    {
-                        "question": "The yellow jersey is awarded to the leader in which famous cycling race?",
-                        "options": ["Tour de France", "Giro d'Italia", "Vuelta a España", "Paris-Roubaix"],
-                        "answer": "Tour de France"
-                    },
-                    {
-                        "question": "What yellow condiment is commonly used on hot dogs and sandwiches?",
-                        "options": ["Ketchup", "Mustard", "Mayonnaise", "Relish"],
-                        "answer": "Mustard"
-                    }
-                ]
-            },
-            {
-                "round": "Round 2: Things that are Blue",
-                "questions": [
-                    {
-                        "question": "What is the name of the blue-skinned members of the Smurfs who live in mushroom-shaped houses?",
-                        "answer": "Smurfs"
-                    },
-                    {
-                        "question": "What type of bird is known for its distinctive blue feathers and often mimics the calls of other bird species?",
-                        "options": ["Blue Jay", "Parrot", "Canary", "Kingfisher"],
-                        "answer": "Blue Jay"
-                    },
-                    {
-                        "question": "Which planet is often referred to as the 'Blue Planet' due to its abundant water?",
-                        "answer": "Earth"
-                    },
-                    {
-                        "question": "What is the name of the gemstone that is deep blue in color and often used in jewelry?",
-                        "options": ["Sapphire", "Emerald", "Ruby", "Topaz"],
-                        "answer": "Sapphire"
-                    },
-                    {
-                        "question": "What is the name of the Disney character who is a blue alien and the best friend of Lilo?",
-                        "options": ["Stitch", "Mickey", "Goofy", "Donald"],
-                        "answer": "Stitch"
-                    },
-                    {
-                        "question": "Which musical genre, characterized by its melancholic sound, is often referred to as 'the blues'?",
-                        "answer": "Blues"
-                    },
-                    {
-                        "question": "What is the name of the famous blue gemstone that is the birthstone for December?",
-                        "options": ["Turquoise", "Garnet", "Amethyst", "Peridot"],
-                        "answer": "Turquoise"
-                    },
-                    {
-                        "question": "What is the name of the blue tang fish who is a friend of Nemo in the movie 'Finding Nemo'?",
-                        "options": ["Dory", "Marlin", "Gill", "Bubbles"],
-                        "answer": "Dory"
-                    },
-                    {
-                        "question": "What is the name of the blue-skinned goddess in Hindu mythology, often depicted playing a flute?",
-                        "answer": "Krishna"
-                    },
-                    {
-                        "question": "Which famous painting by Pablo Picasso is part of his Blue Period and depicts a somber guitarist?",
-                        "answer": "The Old Guitarist"
-                    }
-                ]
-            }
-        ];
+        var firebaseConfig = {
+            apiKey: "AIzaSyCaukt0uBmXQPUWLFICw6WrLaQDS6HA88w",
+            authDomain: "trivia-a6fa1.firebaseapp.com",
+            projectId: "trivia-a6fa1",
+            storageBucket: "trivia-a6fa1.appspot.com",
+            messagingSenderId: "947494662934",
+            appId: "1:947494662934:web:a392dc771a3a93731b1637",
+            measurementId: "G-DXBEPF9HWQ"
+        };
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        const triviaData = [];
+
+        function getTriviaData() {
+            db.collection("trivia").doc("rounds").get().then((doc) => {
+                if (doc.exists) {
+                    console.log("Document data:", doc.data());
+                    loadTriviaData(doc.data());
+                } else {
+                    console.log("No such document!");
+                }
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+        }
+
+        function loadTriviaData(data) {
+            triviaData.push(...data.rounds);
+            displayIntroScreen();
+        }
 
         let currentRoundIndex = 0;
         let currentQuestionIndex = 0;
@@ -284,7 +213,7 @@
             }
         });
 
-        displayIntroScreen();
+        getTriviaData();
     </script>
 </body>
 </html>

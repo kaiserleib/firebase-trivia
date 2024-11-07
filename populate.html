@@ -1,0 +1,78 @@
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+<!-- Add Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    import { getFirestore, collection, getDocs, doc, setDoc } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-lite.min.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+    apiKey: "AIzaSyCaukt0uBmXQPUWLFICw6WrLaQDS6HA88w",
+    authDomain: "trivia-a6fa1.firebaseapp.com",
+    projectId: "trivia-a6fa1",
+    storageBucket: "trivia-a6fa1.appspot.com",
+    messagingSenderId: "947494662934",
+    appId: "1:947494662934:web:a392dc771a3a93731b1637",
+    measurementId: "G-DXBEPF9HWQ"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    const db = getFirestore();
+
+    async function storeTriviaData(data) {
+        try {
+            await setDoc(doc(db, "trivia", "rounds"), data);
+            console.log("Trivia data successfully written!");
+        } catch (error) {
+            console.error("Error writing document: ", error);
+        }
+    }
+
+    // Example data to store
+    const triviaData = {
+        rounds: [
+            {
+                "round": "Round 1: Things that are Yellow",
+                "questions": [
+                    {
+                        "question": "The golden arches are a symbol of which fast-food chain?",
+                        "answer": "McDonald's"
+                    },
+                    {
+                        "question": "The Yellow River is the second-longest river in which country?",
+                        "options": ["India", "China", "Egypt", "Brazil"],
+                        "answer": "China"
+                    },
+                    // Additional questions...
+                ]
+            },
+            {
+                "round": "Round 2: Things that are Blue",
+                "questions": [
+                    {
+                        "question": "What is the name of the blue-skinned members of the Smurfs who live in mushroom-shaped houses?",
+                        "answer": "Smurfs"
+                    },
+                    {
+                        "question": "What type of bird is known for its distinctive blue feathers and often mimics the calls of other bird species?",
+                        "options": ["Blue Jay", "Parrot", "Canary", "Kingfisher"],
+                        "answer": "Blue Jay"
+                    },
+                    // Additional questions...
+                ]
+            }
+        ]
+    };
+
+    // Store the example data
+    storeTriviaData(triviaData);
+</script>
